@@ -392,6 +392,12 @@ string cBlocking_Operation_Multiple_Column_Manipulate::extract_column_info ( con
 	return vsm[flag]->manipulate( * p->get_data_by_index(indice[flag]).at( pdata_indice.at(flag)) );
 }
 
+
+/* 
+
+BEGIN FIELD-SPECIFIC BLOCKING / COMPARATOR DEFINITIONS
+
+ */
 /*
  * Aim: constructors of cBlocking_Operation_By_Coauthors.
  * The difference between the two constructors is that the former one builds unique record id to unique inventor id binary tree,
@@ -399,7 +405,7 @@ string cBlocking_Operation_Multiple_Column_Manipulate::extract_column_info ( con
  */
 
 cBlocking_Operation_By_Coauthors::cBlocking_Operation_By_Coauthors(const list < const cRecord * > & all_rec_pointers,
-																	const cCluster_Info & cluster, const unsigned int coauthors)
+                                                                   const cCluster_Info & cluster, const unsigned int coauthors)
 	: patent_tree(cSort_by_attrib(cPatent::static_get_class_name())), num_coauthors(coauthors) {
 	if ( num_coauthors > 4 ) {
 		std::cout << "================ WARNING =====================" << std::endl;

@@ -138,6 +138,20 @@ public:
 
 };
 
+class cLegalId: public cAttribute_Single_Mode <cLegalId> {
+public:
+	static unsigned int const max_value = 2;
+	cCountry(const char * source = NULL ) {}
+	unsigned int get_attrib_max_value() const {
+		if ( ! is_comparator_activated() )
+			cAttribute::get_attrib_max_value();
+		return max_value;
+	}
+	int exact_compare( const cAttribute & rhs ) const { return this == & rhs; }
+	unsigned int compare(const cAttribute & right_hand_side) const;
+
+};
+
 
 // cClass and cCoauthor are in set_mode, not single_mode
 class cClass: public cAttribute_Set_Mode < cClass > {

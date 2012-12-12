@@ -36,12 +36,11 @@ template <> const string cAttribute_Basic<cLongitude >::interactive_column_names
 template <> const unsigned int cAttribute_Basic<cLongitude >::num_of_interactive_columns = 1;
 template <> const string cAttribute_Basic<cLongitude >::attrib_group = "Patent";
 
-
 template <> const string cAttribute_Basic<cStreet>::class_name = "Street";
 
 
-template <> const string cAttribute_Basic<cCountry>::class_name = "Country";
-//template <> const string cAttribute_Basic<cCountry>::attrib_group = "Patent";
+template <> const string cAttribute_Basic<cLegalId>::class_name = "Legal ID";
+template <> const string cAttribute_Basic<cCountry>::attrib_group = "Patent";
 
 template <> const string cAttribute_Basic<cClass>::class_name = "Class";
 template <> const string cAttribute_Basic<cClass>::attrib_group = "Patent";
@@ -255,7 +254,7 @@ unsigned int cLatitude::compare(const cAttribute & right_hand_side) const {
 
 			unsigned int latlon_score = 0;
 			latlon_score = latloncmp ( * this->get_data().at(0), * this_longitude->get_data().at(0),
-										* rhs.get_data().at(0), * rhs_longitude->get_data().at(0) );
+                                                   * rhs.get_data().at(0), * rhs_longitude->get_data().at(0) );
 
 			if ( country_score == 0 )
 				res = 0;
@@ -339,6 +338,24 @@ unsigned int cClass_M2::compare(const cAttribute & right_hand_side) const {
  */
 
 unsigned int cCountry::compare(const cAttribute & right_hand_side) const {
+	if ( ! is_comparator_activated () )
+		throw cException_No_Comparision_Function(static_get_class_name().c_str());
+
+	if ( !this->is_informative() || ! right_hand_side.is_informative() )
+		return 1;
+	if ( this == & right_hand_side )
+		return 2;
+	else
+		return 0;
+}
+
+/*
+ * cLegalId::compare
+ * Does exact compare on company legal identifiers
+ *
+ */
+
+unsigned int cLegalId::compare(const cAttribute & right_hand_side) const {
 	if ( ! is_comparator_activated () )
 		throw cException_No_Comparision_Function(static_get_class_name().c_str());
 
