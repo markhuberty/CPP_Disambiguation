@@ -35,26 +35,27 @@ const string cBlocking_Operation::delim = "##";
 
 /*
  * Aim: to check the number of columns that are supposed to be useful in a cRecord object.
- * 		Firstname, middlename, lastname, assignee (company), latitude and city are believed to be useful.
+ * 		FOR PATSTAT: Name, Latitude (implicitly using Longitude also) and country are believed to be useful.
  * 		Other attributes, such as street and coauthor, are allowed to be missing.
  * Algorithm: use " is_informative() " function to check each specified attribute, and return the sum.
  */
 
 unsigned int cRecord::informative_attributes() const {
 
-	static const unsigned int firstname_index = cRecord::get_index_by_name(cFirstname::static_get_class_name());
-	static const unsigned int middlename_index = cRecord::get_index_by_name(cMiddlename::static_get_class_name());
-	static const unsigned int lastname_index = cRecord::get_index_by_name(cLastname::static_get_class_name());
-	static const unsigned int assignee_index = cRecord::get_index_by_name(cAssignee::static_get_class_name());
+	// static const unsigned int firstname_index = cRecord::get_index_by_name(cFirstname::static_get_class_name());
+	// static const unsigned int middlename_index = cRecord::get_index_by_name(cMiddlename::static_get_class_name());
+	// static const unsigned int lastname_index = cRecord::get_index_by_name(cLastname::static_get_class_name());
+	// static const unsigned int assignee_index = cRecord::get_index_by_name(cAssignee::static_get_class_name());
+  static const unsigned int name_index = cRecord::get_index_by_name(cName::static_get_class_name());
 	static const unsigned int lat_index = cRecord::get_index_by_name(cLatitude::static_get_class_name());
 	static const unsigned int ctry_index = cRecord::get_index_by_name(cCountry::static_get_class_name());
 
 	unsigned int cnt = 0;
 
-	this->vector_pdata.at(firstname_index)->is_informative() && (++cnt);
-	this->vector_pdata.at(middlename_index)->is_informative() && (++cnt);
-	this->vector_pdata.at(lastname_index)->is_informative() && (++cnt);
-	this->vector_pdata.at(assignee_index)->is_informative() && (++cnt);
+	this->vector_pdata.at(name_index)->is_informative() && (++cnt);
+	// this->vector_pdata.at(middlename_index)->is_informative() && (++cnt);
+	// this->vector_pdata.at(lastname_index)->is_informative() && (++cnt);
+	// this->vector_pdata.at(assignee_index)->is_informative() && (++cnt);
 	this->vector_pdata.at(lat_index)->is_informative() && (++cnt);
 	this->vector_pdata.at(ctry_index)->is_informative() && (++cnt);
 
@@ -566,15 +567,18 @@ cGroup_Value cBlocking_Operation_By_Coauthors::get_topN_coauthors( const cRecord
 string cBlocking_Operation_By_Coauthors::extract_blocking_info(const cRecord * prec) const {
 	const cGroup_Value top_coauthor_list = get_topN_coauthors(prec, num_coauthors);
 	// now make string
-	const unsigned int firstnameindex = cRecord::get_index_by_name(cFirstname::static_get_class_name());
-	const unsigned int lastnameindex = cRecord::get_index_by_name(cLastname::static_get_class_name());
+        const unsigned int nameindex = cRecord::get_index_by_name(cName::static_get_class_name());
+        // Commented out for PATSTAT
+	// const unsigned int firstnameindex = cRecord::get_index_by_name(cFirstname::static_get_class_name());
+	// const unsigned int lastnameindex = cRecord::get_index_by_name(cLastname::static_get_class_name());
 
 	string answer;
 	for ( cGroup_Value::const_iterator p = top_coauthor_list.begin(); p != top_coauthor_list.end(); ++p ) {
-		answer += *(*p)->get_data_by_index(firstnameindex).at(0);
+		answer += *(*p)->get_data_by_index(nameindex).at(0);
 		answer += cBlocking_Operation::delim;
-		answer += *(*p)->get_data_by_index(lastnameindex).at(0);
-		answer += cBlocking_Operation::delim;
+                // Commented out for PATSTAT
+		// answer += *(*p)->get_data_by_index(lastnameindex).at(0);
+		// answer += cBlocking_Operation::delim;
 	}
 	if ( answer.empty() )
 		answer = infoless;
@@ -597,7 +601,8 @@ string cBlocking_Operation_By_Coauthors::extract_blocking_info(const cRecord * p
 /*
  * Aim: constructor of cReconfigurator_AsianNames.
  */
-
+// Not used for PATSTAT; relies on first/middle/last name separation, which PATSTAT doesn't provide.
+// Left here but removed in Disambigmain.cpp
 cReconfigurator_AsianNames::cReconfigurator_AsianNames(): country_index(cRecord::get_index_by_name(cCountry::static_get_class_name())),
 								firstname_index(cRecord::get_index_by_name(cFirstname::static_get_class_name())),
 								middlename_index(cRecord::get_index_by_name(cMiddlename::static_get_class_name())),
@@ -693,10 +698,14 @@ cReconfigurator_Coauthor::cReconfigurator_Coauthor ( const map < const cRecord *
 
 void cReconfigurator_Coauthor :: reconfigure ( const cRecord * p ) const {
 	static const string dot = ".";
-	static const unsigned int firstnameindex = cRecord::get_index_by_name(cFirstname::static_get_class_name());
-	static const unsigned int lastnameindex = cRecord::get_index_by_name(cLastname::static_get_class_name());
-	static const cString_Extract_FirstWord firstname_extracter;
-	static const cString_Remove_Space lastname_extracter;
+        static const unsigned int nameindex = cRecord::get_index_by_name(cName::static_get_class_name());
+        static const cString_Extract_FirstWord name_extracter;
+
+        // Commented out for PATSTAT        
+	// static const unsigned int firstnameindex = cRecord::get_index_by_name(cFirstname::static_get_class_name());
+	// static const unsigned int lastnameindex = cRecord::get_index_by_name(cLastname::static_get_class_name());
+	// static const cString_Extract_FirstWord firstname_extracter;
+	// static const cString_Remove_Space lastname_extracter;
 
 	map < const cRecord *, cGroup_Value, cSort_by_attrib >::const_iterator cpm;
 	cCoauthor temp;
@@ -708,8 +717,7 @@ void cReconfigurator_Coauthor :: reconfigure ( const cRecord * p ) const {
 	for ( cGroup_Value::const_iterator q = patent_coauthors.begin(); q != patent_coauthors.end(); ++q ) {
 		if ( *q == p )
 			continue;
-		string fullname = firstname_extracter.manipulate( * (*q)->get_data_by_index(firstnameindex).at(0) ) + dot
-							+ lastname_extracter.manipulate( * (*q)->get_data_by_index(lastnameindex).at(0) );
+		string fullname = name_extracter.manipulate( * (*q)->get_data_by_index(nameindex).at(0) ); 
 		temp.attrib_set.insert(cCoauthor::static_add_string (fullname) );
 	}
 	const cAttribute * np = cCoauthor::static_add_attrib(temp, 1);
@@ -1476,7 +1484,7 @@ std::pair<const cRecord *, double> disambiguate_by_set_simplified (
  * 1.1 JOHN E - DEROO - MARLBOROUGH - MA - DIGITAL EQUIPMENT CORPORATION (delegate/representative)
  * 1.2 JOHN E - DEROO - MARLBOROUGH - MA - DIGITAL EQUIPMENT CORPORATION
  * 1.3 JOHN	  - DEROO - MARLBOROUGH - MA - QUANTUM CORP
- * 1.4 JOHN E - DEROO - MARLBOROUGH - MA - ATI INTERNATIONAL INC
+c * 1.4 JOHN E - DEROO - MARLBOROUGH - MA - ATI INTERNATIONAL INC
  *
  * Cluster 2:
  * 2.1 JOHN	  - DEROO - HOPKINTON   - MA -
@@ -1631,9 +1639,10 @@ std::pair<const cRecord *, double> disambiguate_by_set (
 									 const cRecord * key2, const cGroup_Value & match2, const double cohesion2,
 									 const double prior,
 									 const cRatios & ratio,  const double mutual_threshold ) {
-	static const unsigned int firstname_index = cRecord::get_similarity_index_by_name(cFirstname::static_get_class_name());
-	static const unsigned int midname_index = cRecord::get_similarity_index_by_name(cMiddlename::static_get_class_name());
-	static const unsigned int lastname_index = cRecord::get_similarity_index_by_name(cLastname::static_get_class_name());
+  static const unsigned int name_index = cRecord::get_similarity_index_by_name(cName::static_get_class_name());
+	// static const unsigned int firstname_index = cRecord::get_similarity_index_by_name(cFirstname::static_get_class_name());
+	// static const unsigned int midname_index = cRecord::get_similarity_index_by_name(cMiddlename::static_get_class_name());
+	// static const unsigned int lastname_index = cRecord::get_similarity_index_by_name(cLastname::static_get_class_name());
 	static const unsigned int country_index = cRecord::get_index_by_name(cCountry::static_get_class_name());
 
 	static const bool country_check = true;
@@ -1653,7 +1662,8 @@ std::pair<const cRecord *, double> disambiguate_by_set (
 		vector < unsigned int > screen_sp = key1->record_compare(*key2);
 		const double screen_r = fetch_ratio(screen_sp, ratio.get_ratios_map());
 		const double screen_p = 1.0 / ( 1.0 + ( 1.0 - prior )/ prior / screen_r );
-		if ( screen_p < 0.3 || screen_sp.at(firstname_index) == 0 || screen_sp.at(midname_index) == 0 || screen_sp.at(lastname_index) == 0 )
+		if ( screen_p < 0.3 || screen_sp.at(name_index) == 0 )
+                  // || screen_sp.at(midname_index) == 0 || screen_sp.at(lastname_index) == 0 )
 			return std::pair<const cRecord *, double> (NULL, 0);
 	}
 	const bool partial_match_mode = true;
@@ -1693,7 +1703,7 @@ std::pair<const cRecord *, double> disambiguate_by_set (
 
 
 			vector< unsigned int > tempsp = (*p)->record_compare(* *q);
-			if ( tempsp.at(firstname_index) == 0 || tempsp.at(midname_index) == 0 || tempsp.at(lastname_index) == 0 )
+			if ( tempsp.at(name_index) == 0 ) //|| tempsp.at(midname_index) == 0 || tempsp.at(lastname_index) == 0 )
 				return std::pair<const cRecord *, double> (NULL, 0);
 
 

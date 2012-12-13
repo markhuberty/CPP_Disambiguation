@@ -10,6 +10,7 @@ position, number of characters to extract, direction (forward=true).
 
 // [ Round 1 ]
 // Name: 1 : 0,0,true
+// LegalId: 1 : 0,0, true
 // Country: 1 : 0,0,true
 // ACTIVE SIMILARITY ATTRIBUTES: Name, Longitude
 
@@ -23,7 +24,7 @@ position, number of characters to extract, direction (forward=true).
 // country: 1 : 0,0, true
 // ACTIVE SIMILARITY ATTRIBUTES: Name, LegalId, Longitude, Coauthor, Class
 
-// [ Round 3 ]
+// [ Round 4 ]
 // Name: 1 : 0,1 , true
 // country: 1 : 0,0, true
 // ACTIVE SIMILARITY ATTRIBUTES: Name, LegalId, Longitude, Coauthor, Class
