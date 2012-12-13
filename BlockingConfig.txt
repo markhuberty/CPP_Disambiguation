@@ -4,13 +4,13 @@
 //attribute name: data index : parameters of string manipulation.
 //parameters of string manipulation for current use: starting
 position, number of characters to extract, direction (forward=true).
-
+// Note that a string length of 0 indicates "grab entire string"
 
 // PROPOSED PATSTAT DEFINITIONS
 
 // [ Round 1 ]
-// Name: 1 : 0,10 , true
-// Country: 1 : 0,1,true
+// Name: 1 : 0,0,true
+// Country: 1 : 0,0,true
 // ACTIVE SIMILARITY ATTRIBUTES: Name, Longitude
 
 // [ Round 2 ]
