@@ -1,0 +1,69 @@
+* Questions re config
+
+1. The BlockingConfig.txt fields are supposed to read 
+attribute_name: data_index : params
+
+The params are supposed to indicate starting_position, chars to
+extract
+
+Are these zero-indexed, hence 0 actually means 1?
+
+1. It appears that the DisambigEngine.cpp code hard-codes fieldnames
+   in it. Hence we need to edit BlockingConfig.txt, EngineConfig.txt,
+   DisambigCustomDefs.cpp, and DisambigEngine.cpp if we're going to
+   change the active fieldnames. Either that, or we have to simply
+   call our "name" "Firstname" and then change the config files to
+   ignore middle/last, etc.
+
+2. Also appears that Disambigmain.cpp has name-specific definitions
+   for comparators and other functions. 
+
+   Functions requiring modification:
+   - ~fetch_records_from_txt~
+
+   - ~disambiguate_by_set~
+
+   - ~Reconfigurator_Coauthor~
+     Note that this appears to try and build coauthors from the
+     individual records?
+
+   - ~DisambigFileOper.cpp~
+     
+
+   
+
+1. Their Latitude data is kind of weird; hard to figure out if it has
+   only lat, long, country, etc.
+
+   NO: this is handled correctly. Does lat + long compare only if the
+   country is the same; otherwise sets the response score to 0.
+
+2. Class (used for coauthors and ipc codes)
+   - In ~DisambigDefs.cpp~, the string split function is defined, and
+     the string separators are encoded. This is then inherited
+   - There's a "Set" version of the attribute class that holds
+     delimited strings appropriately
+   - Hence the right thing to do is to use the ~cClass~ container for
+     both ipc codes and coauthors; and fix the delimiter
+     appropriately, then things should flow through.
+   - Need to check the coauthor blocking again. Appears to derive
+     coauthors from all the data, not the coauthor field
+3. Need to handle Asian names as well--assumes that we have first/last
+   name. This is wrong. Easy thing to do is just skip Asian name
+   reformatting altogehter.
+4. Need to fix the name classes; first/middle/last need to collapse
+   into a single class
+5. Need to add a legal_ids class; should be an exact compare, like Country
+6. 
+
+
+
+* Have done for configuration
+
+1. Added a LegalId class to both DisambigCustomizedDefs.cpp and
+   DisambigCustomizeDefs.h, using an exact comparator function
+2. Added the Coauthor class back in to the Patent family
+3. Updated the ~EngineConfig.txt~ file to hold the correct
+   input/output data and the necessary field attributes for the
+   PATSTAT data.
+4. 
