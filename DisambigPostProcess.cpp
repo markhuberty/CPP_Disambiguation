@@ -58,6 +58,7 @@ void find_associated_nodes(const cCluster & center, const map < const cRecord *,
 	}
 }
 
+// UPDATED to remove Firstname, Lastname from the records
 void post_polish( cCluster_Set & m, map < const cRecord *, const cRecord *> & uid2uinv,
 					const map < const cRecord *, cGroup_Value, cSort_by_attrib > & patent_tree,
 					const string & logfile) {
@@ -66,9 +67,7 @@ void post_polish( cCluster_Set & m, map < const cRecord *, const cRecord *> & ui
 	const double normal_threshold = 0.95;
 	const double asian_threshold = 0.99;
 	double threshold = normal_threshold ;
-	const unsigned int fi = cRecord::get_index_by_name(cFirstname::static_get_class_name());
-	const unsigned int li = cRecord::get_index_by_name(cLastname::static_get_class_name());
-	const unsigned int country_index = cRecord::get_index_by_name(cCountry::static_get_class_name());
+	const unsigned int ni = cRecord::get_index_by_name(cName::static_get_class_name());
 	const unsigned int uid_index = cRecord::get_index_by_name(cUnique_Record_ID::static_get_class_name());
 
 
@@ -117,19 +116,20 @@ void post_polish( cCluster_Set & m, map < const cRecord *, const cRecord *> & ui
 			list < const cRecord *> links ( linkages.begin(), linkages.end()) ;
 
 
-			const cAttribute * center_first_attrib = q->get_cluster_head().m_delegate->get_attrib_pointer_by_index(fi);
+			const cAttribute * center_name_attrib = q->get_cluster_head().m_delegate->get_attrib_pointer_by_index(ni);
 			if ( center_first_attrib->get_data().empty() ) {
 				q->get_cluster_head().m_delegate->print();
 				throw cException_Other("Center First");
 			}
 			const string * centerfirst = center_first_attrib->get_data().at(0);
 
-			const cAttribute * center_last_attrib = q->get_cluster_head().m_delegate->get_attrib_pointer_by_index(li);
-			if ( center_last_attrib->get_data().empty() ) {
-				q->get_cluster_head().m_delegate->print();
-				throw cException_Other("Center Last");
-			}
-			const string * centerlast = center_last_attrib->get_data().at(0);
+                        // Removed for PATSTAT; last name not used
+			// const cAttribute * center_last_attrib = q->get_cluster_head().m_delegate->get_attrib_pointer_by_index(li);
+			// if ( center_last_attrib->get_data().empty() ) {
+			// 	q->get_cluster_head().m_delegate->print();
+			// 	throw cException_Other("Center Last");
+			// }
+			// const string * centerlast = center_last_attrib->get_data().at(0);
 
 			const cAttribute * center_uid_attrib = q->get_cluster_head().m_delegate->get_attrib_pointer_by_index(uid_index);
 			if ( center_uid_attrib->get_data().empty() ) {
@@ -147,19 +147,20 @@ void post_polish( cCluster_Set & m, map < const cRecord *, const cRecord *> & ui
 				//const string * puid = (*r)->get_attrib_pointer_by_index(uid_index)->get_data().at(0);
 
 
-				const cAttribute * pfirst_attrib = (*r)->get_attrib_pointer_by_index(fi);
-				if ( pfirst_attrib->get_data().empty() ) {
+				const cAttribute * pname_attrib = (*r)->get_attrib_pointer_by_index(ni);
+				if ( pname_attrib->get_data().empty() ) {
 					(*r)->print();
-					throw cException_Other("P First");
+					throw cException_Other("P Name");
 				}
-				const string * pfirst = pfirst_attrib->get_data().at(0);
-
-				const cAttribute * plast_attrib = (*r)->get_attrib_pointer_by_index(li);
-				if ( plast_attrib->get_data().empty() ) {
-					(*r)->print();
-					throw cException_Other("P Last");
-				}
-				const string * plast = plast_attrib->get_data().at(0);
+				const string * pname = pname_attrib->get_data().at(0);
+                                
+                                // Removed for PATSTAT
+				// const cAttribute * plast_attrib = (*r)->get_attrib_pointer_by_index(li);
+				// if ( plast_attrib->get_data().empty() ) {
+				// 	(*r)->print();
+				// 	throw cException_Other("P Last");
+				// }
+				// const string * plast = plast_attrib->get_data().at(0);
 
 				const cAttribute * puid_attrib = (*r)->get_attrib_pointer_by_index(uid_index);
 				if ( puid_attrib->get_data().empty() ) {
@@ -174,20 +175,21 @@ void post_polish( cCluster_Set & m, map < const cRecord *, const cRecord *> & ui
 					//const string * qlast = (*s)->get_attrib_pointer_by_index(li)->get_data().at(0);
 					//const string * quid = (*s)->get_attrib_pointer_by_index(uid_index)->get_data().at(0);
 
-					const cAttribute * qfirst_attrib = (*s)->get_attrib_pointer_by_index(fi);
-					if ( qfirst_attrib->get_data().empty() ) {
+					const cAttribute * qname_attrib = (*s)->get_attrib_pointer_by_index(ni);
+					if ( qname_attrib->get_data().empty() ) {
 						(*s)->print();
-						throw cException_Other("Q First");
+						throw cException_Other("Q Name");
 					}
-					const string * qfirst = qfirst_attrib->get_data().at(0);
+					const string * qname = qfirst_attrib->get_data().at(0);
 
-
-					const cAttribute * qlast_attrib = (*s)->get_attrib_pointer_by_index(li);
-					if ( qlast_attrib->get_data().empty() ) {
-						(*s)->print();
-						throw cException_Other("Q Last");
-					}
-					const string * qlast = qlast_attrib->get_data().at(0);
+                                        // Removed per PATSTAT; no first/last 
+                                        // name distinction
+					// const cAttribute * qlast_attrib = (*s)->get_attrib_pointer_by_index(li);
+					// if ( qlast_attrib->get_data().empty() ) {
+					// 	(*s)->print();
+					// 	throw cException_Other("Q Last");
+					// }
+					// const string * qlast = qlast_attrib->get_data().at(0);
 
 					const cAttribute * quid_attrib = (*s)->get_attrib_pointer_by_index(uid_index);
 					if ( quid_attrib->get_data().empty() ) {
@@ -198,12 +200,13 @@ void post_polish( cCluster_Set & m, map < const cRecord *, const cRecord *> & ui
 
 
 
-					double first_score = strcmp95_modified(pfirst->c_str(), qfirst->c_str() );
-					double last_score = strcmp95_modified(plast->c_str(), qlast->c_str());
+					double name_score = strcmp95_modified(pname->c_str(), qfirst->c_str() );
+					// double last_score = strcmp95_modified(plast->c_str(), qlast->c_str());
 
-					if ( first_score > threshold  && last_score > threshold  ) {
-						pplog << *pfirst << "." << *plast << " = " << *qfirst << "." << *qlast << " <----- " << *centerfirst << "."<< *centerlast << "        ||       ";
-						pplog << *puid << " = " << * quid << " <----- " << *centeruid << std::endl;
+					if ( name_score > threshold  &&) {
+                                          pplog << *pname << " = " << *qname <<
+" <----- " << *centername <<  "        ||       ";
+                                          pplog << *puid << " = " << * quid << " <----- " << *centeruid << std::endl;
 
 						z = record2cluster.find(*r);
 						if ( z == record2cluster.end() ) {

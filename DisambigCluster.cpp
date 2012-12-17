@@ -16,7 +16,7 @@ extern "C" {
 #include <cmath>
 
 //initialization of static members.
-const char * const cCluster_Info::primary_delim = "###";
+Const char * const cCluster_Info::primary_delim = "###";
 const char * const cCluster_Info::secondary_delim = ",";
 
 unsigned int cWorker_For_Disambiguation::count = 0;
@@ -593,9 +593,12 @@ void cCluster_Info::disambiguate(const cRatios & ratio, const unsigned int num_t
 			}
 		}
 	}
-	const unsigned int fi = cRecord::get_index_by_name(cFirstname::static_get_class_name());
-	const unsigned int li = cRecord::get_index_by_name(cLastname::static_get_class_name());
-	const unsigned int ui = cRecord::get_index_by_name(cUnique_Record_ID::static_get_class_name());
+        
+        // Modified to handle PATSTAT names
+	// const unsigned int fi = cRecord::get_index_by_name(cFirstname::static_get_class_name());
+	// const unsigned int li = cRecord::get_index_by_name(cLastname::static_get_class_name());
+	// const unsigned int ui = cRecord::get_index_by_name(cUnique_Record_ID::static_get_class_name());
+        const unsigned int fi = cRecord::get_index_by_name(cName:static_get_class_name())
 	std::cout << std::endl;
 	std::cout << "Most consolidated cluster: " << * pmax->get_cluster_head().m_delegate->get_data_by_index(fi).at(0)
 			<<"." << * pmax->get_cluster_head().m_delegate->get_data_by_index(li).at(0)

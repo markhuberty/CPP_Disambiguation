@@ -202,7 +202,7 @@ public:
 
 
 //=============
-
+// NOTE: for PATSTAT, First/Middle/Last names were replaced with cName
 /*
  * 0 .cAttribute
  * 	1. template <> cAttribute_Basic

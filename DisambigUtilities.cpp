@@ -144,7 +144,7 @@ bool make_changable_training_sets_by_assignee(const list <const cRecord*> & reco
 
 
 	bft.reset(blocking_column_names.size());
-	const string tset05_equal_name_array[] = { cFirstname::static_get_class_name(), cLastname::static_get_class_name()};
+	const string tset05_equal_name_array[] = { cName::static_get_class_name()};
 	const string tset05_nonequal_name_array[] = {};
 	const vector <string> tset05_equal_name_vec (tset05_equal_name_array, tset05_equal_name_array + sizeof(tset05_equal_name_array)/sizeof(string));
 	const vector <string> tset05_nonequal_name_vec (tset05_nonequal_name_array, tset05_nonequal_name_array + sizeof(tset05_nonequal_name_array)/sizeof(string));
@@ -189,8 +189,9 @@ bool make_stable_training_sets_by_personal( const list <cRecord> & all_records, 
 	find_rare_names_v2(rare_pointer_vec, record_pointers);
 	list<pointer_pairs> pair_list;
 	vector <string> rare_column_names;
-	rare_column_names.push_back(string(cFirstname::static_get_class_name()));
-	rare_column_names.push_back(string(cLastname::static_get_class_name()));
+        rare_column_names.push_back(string(cName::static_get_class_name()));
+	// rare_column_names.push_back(string(cFirstname::static_get_class_name()));
+	// rare_column_names.push_back(string(cLastname::static_get_class_name()));
 
 	//xset03
 	pair_list.clear();
@@ -291,8 +292,8 @@ bool make_stable_training_sets_by_patent(const list <const cRecord*> & record_po
 
 
 	cBlocking_For_Training bft (record_pointers, blocking_column_names, pstring_oper, uid_identifier, limit);
-
-	const string tset05_equal_name_array[] = { cFirstname::static_get_class_name(), cLastname::static_get_class_name()};
+        // UPDATED for PATSTAT
+	const string tset05_equal_name_array[] = { cName::static_get_class_name()};
 	const string tset05_nonequal_name_array[] = {};
 	const vector <string> tset05_equal_name_vec (tset05_equal_name_array, tset05_equal_name_array + sizeof(tset05_equal_name_array)/sizeof(string));
 	const vector <string> tset05_nonequal_name_vec (tset05_nonequal_name_array, tset05_nonequal_name_array + sizeof(tset05_nonequal_name_array)/sizeof(string));
@@ -459,7 +460,8 @@ void one_step_prostprocess( const list < cRecord > & all_records, const char * l
 	pstring_oper.push_back(& operator_truncate_middlename);
 	pstring_oper.push_back(& operator_truncate_lastname);
 
-	const string blocking_names[] = {cFirstname::static_get_class_name(), cMiddlename::static_get_class_name(), cLastname::static_get_class_name()};
+        // UPDATED to cName for PATSTAT
+	const string blocking_names[] = {cName::static_get_class_name()};
 	vector < string > blocking_column_names(blocking_names, blocking_names + sizeof(blocking_names)/sizeof(string) );
 	vector < unsigned int > blocking_column_data_indice ( blocking_column_names.size(), 0 );
 	//blocking_column_data_indice.at(0) = 1;

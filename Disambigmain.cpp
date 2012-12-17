@@ -138,8 +138,8 @@ int BlockingConfiguration::config_blocking( const char * filename, const string 
 				<< ", Number of chars = " << temp.m_nchar
 				<< ", Direction = " << ( temp.m_isforward ? "true" : "false")
 				<< std::endl;
-
-		if ( columnname == cFirstname::static_get_class_name() )
+                // Changed from Firstname to Name for PATSTAT
+		if ( columnname == cName::static_get_class_name() )
 			BlockingConfiguration::firstname_cur_truncation = temp.m_nchar;
 
 		BlockingConfiguration::BlockingConfig.push_back(temp);
@@ -502,9 +502,9 @@ int Full_Disambiguation( const char * EngineConfigFile, const char * BlockingCon
 	cBlocking_Operation_By_Coauthors blocker_coauthor( all_rec_pointers, num_coauthors_to_group );
 
 	//Reconfigure
-	std::cout << "Reconfiguring ..." << std::endl;
-	const cReconfigurator_AsianNames corrector_asiannames;
-	std::for_each(all_rec_pointers.begin(), all_rec_pointers.end(), corrector_asiannames);
+	// std::cout << "Reconfiguring ..." << std::endl;
+	// const cReconfigurator_AsianNames corrector_asiannames;
+	// std::for_each(all_rec_pointers.begin(), all_rec_pointers.end(), corrector_asiannames);
 	cReconfigurator_Coauthor corrector_coauthor ( blocker_coauthor.get_patent_tree());
 	std::for_each(all_rec_pointers.begin(), all_rec_pointers.end(), corrector_coauthor);
 
@@ -554,14 +554,16 @@ int Full_Disambiguation( const char * EngineConfigFile, const char * BlockingCon
 			{
 				vector <string> presort_columns;
 				cString_Remain_Same operator_no_change;
-				presort_columns.push_back(cFirstname::static_get_class_name());
-				presort_columns.push_back(cLastname::static_get_class_name());
-				presort_columns.push_back(cAssignee::static_get_class_name());
-				presort_columns.push_back(cStreet::static_get_class_name());
-				presort_columns.push_back(cCity::static_get_class_name());
-				presort_columns.push_back(cCountry::static_get_class_name());
+				// presort_columns.push_back(cFirstname::static_get_class_name());
+				// presort_columns.push_back(cLastname::static_get_class_name());
+				// presort_columns.push_back(cAssignee::static_get_class_name());
+				// presort_columns.push_back(cStreet::static_get_class_name());
+				// presort_columns.push_back(cCity::static_get_class_name());
+				// presort_columns.push_back(cCountry::static_get_class_name());
 
-				//presort_columns.push_back(cClass::static_get_class_name());
+                                /* TODO redo this to match all the right names */
+presort_columns.push_back(cName::static_get_class_name());
+presort_columns.push_back(cCountry::static_get_class_name());
 
 				const vector < const cString_Manipulator *> presort_strman( presort_columns.size(), &operator_no_change);
 				const vector < unsigned int > presort_data_indice( presort_columns.size(), 0);
@@ -573,7 +575,7 @@ int Full_Disambiguation( const char * EngineConfigFile, const char * BlockingCon
 			default:
 				;
 		}
-		cFirstname::set_truncation( firstname_prev_truncation, BlockingConfiguration::firstname_cur_truncation);
+		cName::set_truncation( firstname_prev_truncation, BlockingConfiguration::firstname_cur_truncation);
 		firstname_prev_truncation = BlockingConfiguration::firstname_cur_truncation;
 		
 		match.reset_blocking( * BlockingConfiguration::active_blocker_pointer, oldmatchfile);

@@ -66,4 +66,28 @@ Are these zero-indexed, hence 0 actually means 1?
 3. Updated the ~EngineConfig.txt~ file to hold the correct
    input/output data and the necessary field attributes for the
    PATSTAT data.
-4. 
+4. Files containing ~Firstname~ refs (and therefore need editing to
+   deal w/ patstat name formats):
+   1. DisambigCustomDefs.cpp; lines 10-11, 86-87; 90, 99, 115
+   2. DisambigCustomDefs.h; lines 27-33 and 40, 49, 268
+   3. DisambigEngine.cpp; lines
+      45,572,607,639,705,1539,1643,1770,2117,2118 ## DONE
+   4. DisambigFileOper.cpp; lines 161-164 ## DONE, not used; only
+      matters for retrieval from sqllite3 db
+   5. Disambigmain.cpp; lines 142, 557, 576 ## DONE
+   6. DisambigNewCluster.cpp; line 246 ## DONE, useful columns
+      restricted to name/lat/country
+   7. DisambigPostProcess.cpp; line 69 ## DONE, with all future
+      dependencies, reduced to name + ctry + unique_id
+   8. DisambigTraining.cpp; lines 479, 765 ## DONE
+   9. DisambigUtilities.cpp; lines 147, 192, 295, 462 ## DONE
+   10. DisambigDefs.h; line 217 ## DONE, just a
+      comment / hierarchy descriptor for the Attribute class
+   11. DisambigEngine.h; lines 52-57 and lines 380, 436, 610 ## DONE,
+       not really a problem, affects the Asian name reconfigurator,
+       which we don't use b/c we don't have first-last name resolution
+   12. DisambigRatios.h; line 106 ## DONE
+   13. DisambigCluster.cpp; line 596 ## DONE
+
+
+

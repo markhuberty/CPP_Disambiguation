@@ -242,9 +242,10 @@ void cCluster::self_repair() {
  * 			Then traverse the whole cluster and fill in the counter. Finally, get the most frequent.
  *
  */
+// UPDATED for patstat; useful_columns restricted to name, lat, country
 void cCluster::find_representative()  {
-	static const string useful_columns[] = { cFirstname::static_get_class_name(), cMiddlename::static_get_class_name(), cLastname::static_get_class_name(),
-											cLatitude::static_get_class_name(), cAssignee::static_get_class_name(), cCity::static_get_class_name(), cCountry::static_get_class_name()};
+  static const string useful_columns[] = { cName::static_get_class_name(),
+cLatitude::static_get_class_name(), cCountry::static_get_class_name()};
 	static const unsigned int nc = sizeof(useful_columns)/sizeof(string);
 	vector < map < const cAttribute *, unsigned int > > tracer( nc );
 	vector < unsigned int > indice;

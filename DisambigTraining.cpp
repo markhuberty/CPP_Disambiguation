@@ -475,8 +475,8 @@ unsigned int cBlocking_For_Training::create_set(pFunc mf,
 
 void find_rare_names_v2(const vector < cGroup_Value * > &vec_pdest, const list< const cRecord* > & source ) {
 	typedef std::pair < unsigned int, unsigned int > cWord_occurrence;
-	// step 1: build phrase map: key=phrase(here is firstname+lastname with some delimiters). value= list of unique_ids (here is invnums)
-	const string blocks[] = {cFirstname::static_get_class_name(), cLastname::static_get_class_name()};
+	// step 1: build phrase map: key=phrase(here is name, value=list of unique_ids (here is invnums) // updated to Name for PATSTAT
+	const string blocks[] = {cName::static_get_class_name();}
 
 	const unsigned int num_columns_for_blocking = sizeof(blocks)/sizeof(string);
 	const vector <string> blocking_columns(blocks, blocks + num_columns_for_blocking);

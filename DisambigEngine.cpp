@@ -1640,6 +1640,7 @@ std::pair<const cRecord *, double> disambiguate_by_set (
 									 const double prior,
 									 const cRatios & ratio,  const double mutual_threshold ) {
   static const unsigned int name_index = cRecord::get_similarity_index_by_name(cName::static_get_class_name());
+  // Commented out for PATSTAT
 	// static const unsigned int firstname_index = cRecord::get_similarity_index_by_name(cFirstname::static_get_class_name());
 	// static const unsigned int midname_index = cRecord::get_similarity_index_by_name(cMiddlename::static_get_class_name());
 	// static const unsigned int lastname_index = cRecord::get_similarity_index_by_name(cLastname::static_get_class_name());
@@ -2112,6 +2113,7 @@ bool fetch_records_from_txt(list <cRecord> & source, const char * txt_file, cons
 	return true;
 }
 
+// Added cName instance for PATSTAT
 cAttribute * create_attribute_instance ( const string & id ) {
 	cAttribute *p = NULL;
 	if ( id == cFirstname::static_get_class_name() ) {
@@ -2122,6 +2124,9 @@ cAttribute * create_attribute_instance ( const string & id ) {
 	}
 	else if ( id == cMiddlename::static_get_class_name() ) {
 		p = new cMiddlename;
+	}
+        else if ( id == cName::static_get_class_name() ) {
+          p = new cName;
 	}
 	else if ( id == cLatitude::static_get_class_name() ) {
 		p = new cLatitude;
